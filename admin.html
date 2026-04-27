@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel — LuxeGreen Cosmetics</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a3a2a'/><text y='.9em' font-size='60' x='20'>🌿</text></svg>"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body { background: #f0f2f5; }
+    .admin-login { display: flex; }
+    .admin-panel { min-height: 100vh; }
+    .edit-modal-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:5000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px); }
+    .edit-modal-overlay.open { display:flex; }
+    .edit-modal { background:white;border-radius:24px;padding:36px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;position:relative; }
+    .edit-modal h2 { font-family:var(--font-display);font-size:1.8rem;margin-bottom:20px; }
+    .form-row { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+    @media(max-width:540px){.form-row{grid-template-columns:1fr;}}
+    .category-chip { display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--green-mist);border-radius:50px;font-size:0.82rem;font-weight:600;color:var(--green-deep);margin:4px; }
+    .category-chip button { background:none;color:var(--green-deep);font-size:1rem;cursor:pointer;line-height:1;padding:0;opacity:0.6;transition:opacity .2s; }
+    .category-chip button:hover { opacity:1;color:#c00; }
+    .upload-progress { height:4px;background:var(--green-mist);border-radius:2px;overflow:hidden;margin-top:8px;display:none; }
+    .upload-progress-bar { height:100%;background:var(--green-light);transition:width .3s;width:0; }
+    .no-products { text-align:center;padding:60px 20px;color:var(--text-light); }
+    .no-products .icon { font-size:3rem;margin-bottom:14px; }
+    .admin-topbar { background:var(--green-deep);color:var(--cream); }
+    .admin-topbar h1 { color:var(--cream); }
+    .admin-topbar .nav-logo-text { color:var(--cream); }
+    .tab-content-section { display:none; }
+    .tab-content-section.active { display:block; }
+    @media(max-width:600px){
+      .products-table { display:block;overflow-x:auto; }
+      .admin-card-header { flex-direction:column;align-items:flex-start;gap:12px; }
+    }
+    .img-slot { flex:1;min-width:140px; }
+    .img-slot-label { font-size:0.75rem;font-weight:600;color:var(--text-mid);margin-bottom:6px;letter-spacing:.06em; }
+  </style>
+</head>
+<body>
+
+<!-- ====== LOGIN SCREEN ====== -->
+<div class="admin-login" id="loginScreen">
+  <div class="admin-login-card">
+    <div class="admin-login-logo">
+      <div class="nav-logo-icon" style="width:56px;height:56px;margin:0 auto 12px">
+        <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:var(--cream)"><path d="M17 8C8 10 5.9 16.17 3.82 21c1.69-1.19 3.43-2.25 5.18-3C9 17 10 14 17 8z"/><path d="M21 3c0 0-5 2-10 7-1.5 1.5-2.5 3.5-3 5.5 2.4-.6 5.4-2 8-5.5C18.5 8.5 21 3 21 3z"/></svg>
+      </div>
+      <h2>Admin Panel</h2>
+      <p>LuxeGreen Cosmetics</p>
+    </div>
+    <div id="loginError" style="display:none;background:#fee;color:#c00;padding:10px 14px;border-radius:8px;font-size:0.85rem;margin-bottom:16px"></div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="loginEmail" placeholder="admin@luxegreen.com" autocomplete="email"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doLogin()" id="loginBtn">
+      <span>Sign In</span>
+    </button>
+    <p style="text-align:center;margin-top:16px;font-size:0.8rem;color:var(--text-light)">
+      <a href="index.html" style="color:var(--green-light)">← Back to Website</a>
+    </p>
+  </div>
+</div>
+
+<!-- ====== ADMIN PANEL ====== -->
+<div class="admin-panel" id="adminPanel">
+
+  <!-- TOP BAR -->
+  <div class="admin-topbar">
+    <div class="admin-topbar-left">
+      <a href="index.html" class="nav-logo" style="text-decoration:none">
+        <div class="nav-logo-icon" style="width:36px;height:36px">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:var(--cream)"><path d="M17 8C8 10 5.9 16.17 3.82 21c1.69-1.19 3.43-2.25 5.18-3C9 17 10 14 17 8z"/><path d="M21 3c0 0-5 2-10 7-1.5 1.5-2.5 3.5-3 5.5 2.4-.6 5.4-2 8-5.5C18.5 8.5 21 3 21 3z"/></svg>
+        </div>
+        <span class="nav-logo-text" style="font-size:1.2rem">Luxe<span style="color:var(--gold)">Green</span> <span style="font-size:0.85rem;color:rgba(250,246,240,0.6);font-family:var(--font-body);font-weight:400">Admin</span></span>
+      </a>
+    </div>
+    <div class="admin-topbar-right">
+      <span class="admin-user" id="adminUserEmail"></span>
+      <a href="index.html" style="font-size:0.8rem;color:rgba(250,246,240,0.7);margin-right:8px">← Site</a>
+      <button class="btn-outline" style="padding:8px 18px;font-size:0.8rem;color:var(--cream);border-color:rgba(255,255,255,0.3)" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="admin-content">
+
+    <!-- STATS -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <div class="stat-icon green">📦</div>
+        <div><div class="stat-num" id="statProducts">–</div><div class="stat-label">Total Products</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon gold">🏷️</div>
+        <div><div class="stat-num" id="statCategories">–</div><div class="stat-label">Categories</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">🌟</div>
+        <div><div class="stat-num" id="statFeatured">–</div><div class="stat-label">Featured Items</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue">💰</div>
+        <div><div class="stat-num" id="statAvgPrice">–</div><div class="stat-label">Avg. Price</div></div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('products', this)">📦 Products</button>
+      <button class="admin-tab" onclick="switchTab('add', this)">➕ Add Product</button>
+      <button class="admin-tab" onclick="switchTab('categories', this)">🏷️ Categories</button>
+    </div>
+
+    <!-- ===== PRODUCTS TAB ===== -->
+    <div class="tab-content-section active" id="tab-products">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h2>All Products</h2>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input type="text" id="searchProducts" placeholder="Search products..." oninput="filterTable(this.value)"
+              style="padding:9px 16px;border:1.5px solid var(--cream-dark);border-radius:50px;font-family:var(--font-body);font-size:0.85rem;outline:none;background:var(--cream);min-width:180px"/>
+            <select id="filterCat" onchange="filterTable()" style="padding:9px 16px;border:1.5px solid var(--cream-dark);border-radius:50px;font-family:var(--font-body);font-size:0.85rem;outline:none;background:var(--cream)">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="products-table" id="productsTable">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Old Price</th>
+                <th>Badge</th>
+                <th>Featured</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-light)">Loading products...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ADD PRODUCT TAB ===== -->
+    <div class="tab-content-section" id="tab-add">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h2>Add New Product</h2>
+        </div>
+        <form onsubmit="saveProduct(event)" id="addProductForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Product Name *</label>
+              <input type="text" id="prodName" placeholder="e.g. Shea Butter Cream" required/>
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="prodCategory" required>
+                <option value="">Select Category</option>
+                <option>Soaps</option>
+                <option>Creams</option>
+                <option>Scrubs</option>
+                <option>Oils</option>
+                <option>Hair Care</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Price (₦) *</label>
+              <input type="number" id="prodPrice" placeholder="e.g. 5000" min="0" step="100" required/>
+            </div>
+            <div class="form-group">
+              <label>Old Price (₦) <span style="font-weight:400;color:var(--text-light)">(optional)</span></label>
+              <input type="number" id="prodOldPrice" placeholder="e.g. 7000" min="0" step="100"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description *</label>
+            <textarea id="prodDesc" placeholder="Describe the product benefits, ingredients, and how to use..." required style="min-height:110px"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Badge <span style="font-weight:400;color:var(--text-light)">(optional)</span></label>
+              <select id="prodBadge">
+                <option value="">None</option>
+                <option value="New">New</option>
+                <option value="Sale">Sale</option>
+                <option value="Hot">Hot</option>
+                <option value="Popular">Popular</option>
+              </select>
+            </div>
+            <div class="form-group" style="display:flex;align-items:flex-end;gap:10px;padding-bottom:4px">
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:0;user-select:none">
+                <input type="checkbox" id="prodFeatured" style="width:18px;height:18px;accent-color:var(--green-deep)"/>
+                <span style="font-size:0.85rem;font-weight:500">Mark as Best Seller / Featured</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- IMAGE UPLOAD SLOTS -->
+          <div style="margin-bottom:20px">
+            <label style="display:block;font-size:0.82rem;font-weight:600;color:var(--text-mid);margin-bottom:10px;letter-spacing:.04em">Product Images (Up to 2)</label>
+            <div style="display:flex;gap:16px;flex-wrap:wrap">
+              <div class="img-slot">
+                <div class="img-slot-label">Image 1 (Main) *</div>
+                <div class="img-upload-area" id="dropZone1" onclick="document.getElementById('img1Input').click()">
+                  <input type="file" id="img1Input" accept="image/*" onchange="handleImageSelect(this, 1)" style="display:none"/>
+                  <div class="img-upload-icon">📸</div>
+                  <p>Click to upload main image</p>
+                  <small>JPG, PNG, WebP — max 5MB</small>
+                </div>
+                <div class="upload-progress" id="prog1"><div class="upload-progress-bar" id="progBar1"></div></div>
+                <div class="img-preview-row" id="preview1"></div>
+              </div>
+              <div class="img-slot">
+                <div class="img-slot-label">Image 2 (Side/Detail)</div>
+                <div class="img-upload-area" id="dropZone2" onclick="document.getElementById('img2Input').click()">
+                  <input type="file" id="img2Input" accept="image/*" onchange="handleImageSelect(this, 2)" style="display:none"/>
+                  <div class="img-upload-icon">🖼️</div>
+                  <p>Click to upload second image</p>
+                  <small>JPG, PNG, WebP — max 5MB</small>
+                </div>
+                <div class="upload-progress" id="prog2"><div class="upload-progress-bar" id="progBar2"></div></div>
+                <div class="img-preview-row" id="preview2"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="addProductError" style="display:none;background:#fee;color:#c00;padding:10px 14px;border-radius:8px;font-size:0.85rem;margin-bottom:14px"></div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <button type="submit" class="btn-primary" id="addProductBtn" style="flex:1;justify-content:center;min-width:140px">
+              <span>Save Product</span>
+            </button>
+            <button type="button" class="btn-outline" onclick="resetProductForm()" style="flex:1;justify-content:center;min-width:100px">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== CATEGORIES TAB ===== -->
+    <div class="tab-content-section" id="tab-categories">
+      <div class="admin-card" style="margin-bottom:24px">
+        <div class="admin-card-header">
+          <h2>Add Category</h2>
+        </div>
+        <div class="form-row" style="align-items:flex-end">
+          <div class="form-group" style="margin-bottom:0">
+            <label>Category Name *</label>
+            <input type="text" id="catName" placeholder="e.g. Toners"/>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Icon (emoji)</label>
+            <input type="text" id="catIcon" placeholder="e.g. 🌸" maxlength="4"/>
+          </div>
+          <button class="btn-primary" onclick="addCategoryAction()" style="align-self:flex-end;white-space:nowrap">
+            <span>Add Category</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h2>Manage Categories</h2>
+        </div>
+        <div id="categoriesList" style="display:flex;flex-wrap:wrap;gap:8px;min-height:60px">
+          <p style="color:var(--text-light);font-size:0.88rem">Loading categories...</p>
+        </div>
+        <p style="font-size:0.8rem;color:var(--text-light);margin-top:14px">⚠️ Deleting a category will not delete its products. Products will remain but may appear uncategorised.</p>
+      </div>
+    </div>
+
+  </div><!-- /admin-content -->
+</div><!-- /adminPanel -->
+
+<!-- EDIT PRODUCT MODAL -->
+<div class="edit-modal-overlay" id="editModalOverlay" onclick="if(event.target===this)closeEditModal()">
+  <div class="edit-modal" id="editModalContent">
+    <!-- dynamic -->
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="edit-modal-overlay" id="deleteConfirm" onclick="if(event.target===this)closeDeleteConfirm()">
+  <div style="background:white;border-radius:20px;padding:36px;max-width:380px;width:100%;text-align:center">
+    <div style="font-size:2.5rem;margin-bottom:14px">🗑️</div>
+    <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:10px">Delete Product?</h3>
+    <p style="color:var(--text-mid);font-size:0.88rem;margin-bottom:24px">This action cannot be undone. The product will be permanently removed.</p>
+    <div style="display:flex;gap:12px;justify-content:center">
+      <button class="btn-outline" onclick="closeDeleteConfirm()" style="flex:1;justify-content:center">Cancel</button>
+      <button class="action-btn action-delete" id="confirmDeleteBtn" onclick="confirmDelete()" style="flex:1;padding:12px;border-radius:50px;font-size:0.85rem">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import {
+  db, auth, getProducts, addProduct, updateProduct, deleteProduct,
+  getCategories, addCategory, deleteCategory,
+  uploadToCloudinary, showToast, fmt,
+  signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from './js/firebase.js';
+
+// ============================================ STATE
+let allProducts = [];
+let allCategories = [];
+let uploadedImages = [null, null]; // [img1url, img2url]
+let pendingDeleteId = null;
+let editingProductId = null;
+
+// ============================================ AUTH
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    document.getElementById('adminUserEmail').textContent = user.email;
+    loadAll();
+  } else {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminPanel').style.display = 'none';
+  }
+});
+
+window.doLogin = async () => {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('loginBtn');
+  const errEl = document.getElementById('loginError');
+
+  if (!email || !password) { errEl.style.display='block'; errEl.textContent='Please enter your email and password.'; return; }
+
+  btn.innerHTML = '<span class="loading-spinner"></span>';
+  btn.disabled = true;
+  errEl.style.display = 'none';
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (e) {
+    errEl.style.display = 'block';
+    errEl.textContent = e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password'
+      ? 'Invalid email or password. Please try again.'
+      : 'Login failed. Please check your credentials.';
+    btn.innerHTML = '<span>Sign In</span>';
+    btn.disabled = false;
+  }
+};
+
+window.doLogout = async () => {
+  await signOut(auth);
+};
+
+// ============================================ LOAD ALL
+async function loadAll() {
+  await Promise.all([loadProducts(), loadCategories()]);
+}
+
+// ============================================ PRODUCTS
+async function loadProducts() {
+  try {
+    allProducts = await getProducts();
+    renderProductsTable(allProducts);
+    updateStats();
+    populateCategoryFilter();
+  } catch (e) {
+    document.getElementById('productsTableBody').innerHTML =
+      `<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text-light)">Error loading products. Check Firebase config.</td></tr>`;
+  }
+}
+
+function updateStats() {
+  document.getElementById('statProducts').textContent = allProducts.length;
+  document.getElementById('statFeatured').textContent = allProducts.filter(p => p.featured || p.bestSeller).length;
+  const prices = allProducts.map(p => parseFloat(p.price)).filter(n => !isNaN(n));
+  document.getElementById('statAvgPrice').textContent = prices.length ? fmt(prices.reduce((a,b)=>a+b,0)/prices.length) : '–';
+}
+
+function renderProductsTable(products) {
+  const tbody = document.getElementById('productsTableBody');
+  if (!products.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="no-products"><div class="icon">📦</div><p>No products yet. Add your first product!</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = products.map(p => {
+    const img = (p.images && p.images[0]) ? p.images[0] : '';
+    return `<tr>
+      <td>${img ? `<img class="table-img" src="${img}" alt="${p.name}" loading="lazy"/>` : `<div class="table-img" style="display:flex;align-items:center;justify-content:center;background:var(--green-mist);font-size:1.4rem">🌿</div>`}</td>
+      <td style="font-weight:600;max-width:200px">${p.name}</td>
+      <td><span style="background:var(--green-mist);color:var(--green-deep);padding:3px 10px;border-radius:50px;font-size:0.75rem;font-weight:600">${p.category || '–'}</span></td>
+      <td style="font-weight:700;color:var(--green-deep)">${fmt(p.price)}</td>
+      <td style="color:var(--text-light);text-decoration:line-through">${p.oldPrice ? fmt(p.oldPrice) : '–'}</td>
+      <td>${p.badge ? `<span class="table-badge badge-active">${p.badge}</span>` : '–'}</td>
+      <td>${p.featured ? '⭐' : '–'}</td>
+      <td>
+        <div class="table-actions">
+          <button class="action-btn action-edit" onclick="openEditModal('${p.id}')">✏️ Edit</button>
+          <button class="action-btn action-delete" onclick="openDeleteConfirm('${p.id}')">🗑️ Delete</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function populateCategoryFilter() {
+  const sel = document.getElementById('filterCat');
+  const catSelect = document.getElementById('prodCategory');
+  const cats = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
+  sel.innerHTML = '<option value="">All Categories</option>' + cats.map(c => `<option>${c}</option>`).join('');
+  // Also update form dropdown with firebase categories
+  if (allCategories.length > 0) {
+    catSelect.innerHTML = '<option value="">Select Category</option>' +
+      allCategories.map(c => `<option value="${c.name}">${c.icon || ''} ${c.name}</option>`).join('');
+  }
+}
+
+window.filterTable = (val) => {
+  const search = (val ?? document.getElementById('searchProducts').value).toLowerCase();
+  const cat = document.getElementById('filterCat').value;
+  const filtered = allProducts.filter(p =>
+    (!search || p.name.toLowerCase().includes(search) || (p.description||'').toLowerCase().includes(search)) &&
+    (!cat || p.category === cat)
+  );
+  renderProductsTable(filtered);
+};
+
+// ============================================ IMAGE UPLOAD
+window.handleImageSelect = async (input, slot) => {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { showToast('Image must be under 5MB', 'error'); return; }
+
+  const prog = document.getElementById(`prog${slot}`);
+  const bar = document.getElementById(`progBar${slot}`);
+  const preview = document.getElementById(`preview${slot}`);
+
+  prog.style.display = 'block';
+  bar.style.width = '30%';
+
+  try {
+    // Local preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      preview.innerHTML = `
+        <div class="img-preview-item">
+          <img src="${e.target.result}" alt="Preview"/>
+          <div class="img-preview-remove" onclick="removeImage(${slot})">✕</div>
+        </div>`;
+    };
+    reader.readAsDataURL(file);
+
+    bar.style.width = '60%';
+    const url = await uploadToCloudinary(file);
+    uploadedImages[slot - 1] = url;
+    bar.style.width = '100%';
+    setTimeout(() => { prog.style.display = 'none'; bar.style.width = '0'; }, 600);
+    showToast(`Image ${slot} uploaded!`, 'success');
+  } catch (e) {
+    prog.style.display = 'none';
+    showToast(`Upload failed: ${e.message}. Check Cloudinary preset "luxegreen_unsigned" is created.`, 'error');
+    uploadedImages[slot - 1] = null;
+  }
+};
+
+window.removeImage = (slot) => {
+  uploadedImages[slot - 1] = null;
+  document.getElementById(`preview${slot}`).innerHTML = '';
+  document.getElementById(`img${slot}Input`).value = '';
+};
+
+// ============================================ ADD PRODUCT
+window.saveProduct = async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('addProductBtn');
+  const errEl = document.getElementById('addProductError');
+  errEl.style.display = 'none';
+
+  if (!uploadedImages[0]) {
+    errEl.style.display = 'block';
+    errEl.textContent = 'Please upload at least one product image (Image 1).';
+    return;
+  }
+
+  const data = {
+    name: document.getElementById('prodName').value.trim(),
+    category: document.getElementById('prodCategory').value,
+    price: parseFloat(document.getElementById('prodPrice').value),
+    oldPrice: parseFloat(document.getElementById('prodOldPrice').value) || null,
+    description: document.getElementById('prodDesc').value.trim(),
+    badge: document.getElementById('prodBadge').value || null,
+    featured: document.getElementById('prodFeatured').checked,
+    bestSeller: document.getElementById('prodFeatured').checked,
+    images: uploadedImages.filter(Boolean),
+  };
+
+  btn.innerHTML = '<span class="loading-spinner"></span><span>Saving...</span>';
+  btn.disabled = true;
+
+  try {
+    await addProduct(data);
+    showToast(`"${data.name}" added successfully! 🌿`, 'success');
+    resetProductForm();
+    await loadProducts();
+    switchTab('products', document.querySelector('.admin-tab'));
+  } catch (err) {
+    errEl.style.display = 'block';
+    errEl.textContent = 'Error saving product: ' + err.message;
+  } finally {
+    btn.innerHTML = '<span>Save Product</span>';
+    btn.disabled = false;
+  }
+};
+
+window.resetProductForm = () => {
+  document.getElementById('addProductForm').reset();
+  uploadedImages = [null, null];
+  ['1','2'].forEach(s => {
+    document.getElementById(`preview${s}`).innerHTML = '';
+    document.getElementById(`prog${s}`).style.display = 'none';
+  });
+  document.getElementById('addProductError').style.display = 'none';
+};
+
+// ============================================ EDIT PRODUCT
+window.openEditModal = (id) => {
+  const p = allProducts.find(p => p.id === id);
+  if (!p) return;
+  editingProductId = id;
+  let editImages = [...(p.images || [null, null])];
+  while (editImages.length < 2) editImages.push(null);
+
+  document.getElementById('editModalContent').innerHTML = `
+    <button class="modal-close" onclick="closeEditModal()" style="position:absolute;top:16px;right:16px" aria-label="Close">✕</button>
+    <h2>Edit Product</h2>
+    <div class="form-row">
+      <div class="form-group"><label>Product Name *</label><input type="text" id="eN" value="${p.name || ''}" required/></div>
+      <div class="form-group"><label>Category *</label>
+        <select id="eC">
+          <option value="">Select</option>
+          ${['Soaps','Creams','Scrubs','Oils','Hair Care'].map(c => `<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`).join('')}
+          ${allCategories.filter(c=>!['Soaps','Creams','Scrubs','Oils','Hair Care'].includes(c.name)).map(c => `<option value="${c.name}" ${p.category===c.name?'selected':''}>${c.name}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Price (₦) *</label><input type="number" id="eP" value="${p.price || ''}" min="0" step="100" required/></div>
+      <div class="form-group"><label>Old Price (₦)</label><input type="number" id="eOP" value="${p.oldPrice || ''}" min="0" step="100"/></div>
+    </div>
+    <div class="form-group"><label>Description *</label><textarea id="eD" style="min-height:90px" required>${p.description || ''}</textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Badge</label>
+        <select id="eB">
+          <option value="">None</option>
+          ${['New','Sale','Hot','Popular'].map(b => `<option value="${b}" ${p.badge===b?'selected':''}>${b}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:4px">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <input type="checkbox" id="eF" ${p.featured?'checked':''} style="width:18px;height:18px;accent-color:var(--green-deep)"/>
+          <span style="font-size:0.85rem;font-weight:500">Featured / Best Seller</span>
+        </label>
+      </div>
+    </div>
+    <div style="margin-bottom:20px">
+      <label style="display:block;font-size:0.82rem;font-weight:600;color:var(--text-mid);margin-bottom:10px">Update Images</label>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        ${[0,1].map(i => `
+          <div class="img-slot">
+            <div class="img-slot-label">Image ${i+1}${i===0?' (Main)':''}</div>
+            <div class="img-upload-area" onclick="document.getElementById('eImg${i+1}').click()" style="padding:14px">
+              <input type="file" id="eImg${i+1}" accept="image/*" onchange="handleEditImage(this,${i})" style="display:none"/>
+              <div style="font-size:1.4rem">📸</div>
+              <p style="font-size:0.78rem">Click to change</p>
+            </div>
+            <div class="upload-progress" id="eProg${i+1}"><div class="upload-progress-bar" id="eProgBar${i+1}"></div></div>
+            <div id="ePreview${i+1}" class="img-preview-row">
+              ${editImages[i] ? `<div class="img-preview-item"><img src="${editImages[i]}" alt="Current"/><div class="img-preview-remove" onclick="removeEditImage(${i})">✕</div></div>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div id="editError" style="display:none;background:#fee;color:#c00;padding:10px 14px;border-radius:8px;font-size:0.85rem;margin-bottom:14px"></div>
+    <div style="display:flex;gap:12px">
+      <button class="btn-primary" onclick="saveEditProduct()" id="saveEditBtn" style="flex:1;justify-content:center"><span>Save Changes</span></button>
+      <button class="btn-outline" onclick="closeEditModal()" style="flex:1;justify-content:center">Cancel</button>
+    </div>`;
+
+  window._editImages = [...editImages];
+  document.getElementById('editModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+window.handleEditImage = async (input, idx) => {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { showToast('Max 5MB per image', 'error'); return; }
+  const slot = idx + 1;
+  const prog = document.getElementById(`eProg${slot}`);
+  const bar = document.getElementById(`eProgBar${slot}`);
+  prog.style.display = 'block';
+  bar.style.width = '50%';
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById(`ePreview${slot}`).innerHTML = `<div class="img-preview-item"><img src="${e.target.result}"/><div class="img-preview-remove" onclick="removeEditImage(${idx})">✕</div></div>`;
+  };
+  reader.readAsDataURL(file);
+  try {
+    const url = await uploadToCloudinary(file);
+    window._editImages[idx] = url;
+    bar.style.width = '100%';
+    setTimeout(() => { prog.style.display='none'; bar.style.width='0'; }, 500);
+    showToast('Image updated!', 'success');
+  } catch(e) {
+    prog.style.display = 'none';
+    showToast('Upload failed. Check Cloudinary settings.', 'error');
+  }
+};
+
+window.removeEditImage = (idx) => {
+  window._editImages[idx] = null;
+  document.getElementById(`ePreview${idx+1}`).innerHTML = '';
+};
+
+window.saveEditProduct = async () => {
+  const btn = document.getElementById('saveEditBtn');
+  const errEl = document.getElementById('editError');
+  errEl.style.display = 'none';
+
+  const images = (window._editImages || []).filter(Boolean);
+  if (!images.length) { errEl.style.display='block'; errEl.textContent='At least one image is required.'; return; }
+
+  const data = {
+    name: document.getElementById('eN').value.trim(),
+    category: document.getElementById('eC').value,
+    price: parseFloat(document.getElementById('eP').value),
+    oldPrice: parseFloat(document.getElementById('eOP').value) || null,
+    description: document.getElementById('eD').value.trim(),
+    badge: document.getElementById('eB').value || null,
+    featured: document.getElementById('eF').checked,
+    bestSeller: document.getElementById('eF').checked,
+    images,
+  };
+
+  if (!data.name || !data.category || !data.price) { errEl.style.display='block'; errEl.textContent='Name, category, and price are required.'; return; }
+
+  btn.innerHTML = '<span class="loading-spinner"></span><span>Saving...</span>';
+  btn.disabled = true;
+
+  try {
+    await updateProduct(editingProductId, data);
+    showToast('Product updated!', 'success');
+    closeEditModal();
+    await loadProducts();
+  } catch(e) {
+    errEl.style.display='block';
+    errEl.textContent = 'Error: ' + e.message;
+  } finally {
+    btn.innerHTML = '<span>Save Changes</span>';
+    btn.disabled = false;
+  }
+};
+
+window.closeEditModal = () => {
+  document.getElementById('editModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  editingProductId = null;
+};
+
+// ============================================ DELETE
+window.openDeleteConfirm = (id) => {
+  pendingDeleteId = id;
+  document.getElementById('deleteConfirm').classList.add('open');
+};
+window.closeDeleteConfirm = () => {
+  document.getElementById('deleteConfirm').classList.remove('open');
+  pendingDeleteId = null;
+};
+window.confirmDelete = async () => {
+  if (!pendingDeleteId) return;
+  try {
+    await deleteProduct(pendingDeleteId);
+    showToast('Product deleted.', 'success');
+    closeDeleteConfirm();
+    await loadProducts();
+  } catch(e) {
+    showToast('Error deleting: ' + e.message, 'error');
+  }
+};
+
+// ============================================ CATEGORIES
+async function loadCategories() {
+  try {
+    allCategories = await getCategories();
+    renderCategories();
+    document.getElementById('statCategories').textContent = allCategories.length;
+    populateCategoryFilter();
+  } catch(e) {
+    document.getElementById('categoriesList').innerHTML = `<p style="color:var(--text-light)">Error loading categories.</p>`;
+  }
+}
+
+function renderCategories() {
+  const el = document.getElementById('categoriesList');
+  if (!allCategories.length) { el.innerHTML = '<p style="color:var(--text-light);font-size:0.88rem">No categories yet.</p>'; return; }
+  el.innerHTML = allCategories.map(c => `
+    <div class="category-chip">
+      ${c.icon || '🌿'} ${c.name}
+      <button onclick="deleteCategoryAction('${c.id}', '${c.name}')" title="Delete category">✕</button>
+    </div>`).join('');
+}
+
+window.addCategoryAction = async () => {
+  const name = document.getElementById('catName').value.trim();
+  const icon = document.getElementById('catIcon').value.trim() || '🌿';
+  if (!name) { showToast('Please enter a category name.', 'error'); return; }
+  if (allCategories.some(c => c.name.toLowerCase() === name.toLowerCase())) { showToast('Category already exists.', 'error'); return; }
+  try {
+    await addCategory({ name, icon });
+    showToast(`Category "${name}" added!`, 'success');
+    document.getElementById('catName').value = '';
+    document.getElementById('catIcon').value = '';
+    await loadCategories();
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  }
+};
+
+window.deleteCategoryAction = async (id, name) => {
+  if (!confirm(`Delete category "${name}"? Products in this category will remain.`)) return;
+  try {
+    await deleteCategory(id);
+    showToast(`Category "${name}" deleted.`, 'success');
+    await loadCategories();
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  }
+};
+
+// ============================================ TABS
+window.switchTab = (tab, el) => {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content-section').forEach(s => s.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else document.querySelector(`.admin-tab[onclick*="${tab}"]`)?.classList.add('active');
+  document.getElementById(`tab-${tab}`)?.classList.add('active');
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LuxeGreen Cosmetics — Natural Beauty, Redefined</title>
+  <meta name="description" content="LuxeGreen Cosmetics — Premium natural skincare, soaps, creams, scrubs, and oils crafted for radiant, healthy skin. Shop our bestsellers and experience the luxury of nature."/>
+  <meta name="keywords" content="natural cosmetics, organic skincare, luxury soaps, body creams, face scrubs, hair care, Nigeria cosmetics, LuxeGreen"/>
+  <meta name="author" content="LuxeGreen Cosmetics"/>
+  <meta property="og:title" content="LuxeGreen Cosmetics — Natural Beauty, Redefined"/>
+  <meta property="og:description" content="Premium natural skincare crafted for radiant, healthy skin. Shop soaps, creams, scrubs, oils and hair care."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://res.cloudinary.com/ursnauufn/image/upload/v1/luxegreen/og-image.jpg"/>
+  <link rel="canonical" href="https://luxegreen.vercel.app/"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a3a2a'/><text y='.9em' font-size='60' x='20'>🌿</text></svg>"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Store","name":"LuxeGreen Cosmetics","description":"Premium natural skincare and beauty products","url":"https://luxegreen.vercel.app","logo":"https://res.cloudinary.com/ursnauufn/image/upload/v1/luxegreen/logo.png","sameAs":["https://instagram.com/luxegreencosmetics"]}
+  </script>
+</head>
+<body>
+
+<!-- ====== NAVBAR ====== -->
+<nav id="navbar" class="dark-nav">
+  <a href="index.html" class="nav-logo" aria-label="LuxeGreen Home">
+    <div class="nav-logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#faf6f0"><path d="M17 8C8 10 5.9 16.17 3.82 21c1.69-1.19 3.43-2.25 5.18-3C9 17 10 14 17 8z"/><path d="M21 3c0 0-5 2-10 7-1.5 1.5-2.5 3.5-3 5.5 2.4-.6 5.4-2 8-5.5C18.5 8.5 21 3 21 3z"/></svg>
+    </div>
+    <span class="nav-logo-text">Luxe<span>Green</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="services.html">Services</a></li>
+  </ul>
+  <div class="nav-search-wrap">
+    <svg class="srch-ico" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="search" placeholder="Search products…" id="desktopSearch" oninput="handleDesktopSearch(this.value)" autocomplete="off"/>
+  </div>
+  <div class="nav-icons">
+    <button class="nav-icon-btn" onclick="toggleCart()" aria-label="Cart">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ====== MOBILE BOTTOM NAV ====== -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <div class="mobile-bottom-nav-inner">
+    <a href="index.html" class="mob-nav-item active">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="mob-label">Home</span>
+    </a>
+    <a href="shop.html" class="mob-nav-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="mob-label">Shop</span>
+    </a>
+    <a href="services.html" class="mob-nav-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span class="mob-label">Services</span>
+    </a>
+    <button class="mob-nav-item" onclick="toggleCart()" aria-label="Cart">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/></svg>
+      <span class="mob-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none">0</span>
+    </button>
+    <button class="mob-nav-item" onclick="openMoreDrawer()" aria-label="More">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span class="mob-label">More</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ====== MORE DRAWER ====== -->
+<div class="mob-overlay" id="mobOverlay" onclick="closeMoreDrawer()"></div>
+<div class="more-drawer" id="moreDrawer">
+  <div class="more-drawer-handle"></div>
+  <div class="more-drawer-head">
+    <div class="more-drawer-head-logo">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#faf6f0"><path d="M17 8C8 10 5.9 16.17 3.82 21c1.69-1.19 3.43-2.25 5.18-3C9 17 10 14 17 8z"/><path d="M21 3c0 0-5 2-10 7-1.5 1.5-2.5 3.5-3 5.5 2.4-.6 5.4-2 8-5.5C18.5 8.5 21 3 21 3z"/></svg>
+    </div>
+    <div><h3 class="more-drawer-head" style="font-family:var(--font-display);font-size:1.1rem;color:var(--green-deep)">LuxeGreen</h3><p style="font-size:0.72rem;color:var(--text-light)">Natural Beauty, Redefined</p></div>
+  </div>
+  <div class="more-drawer-section">
+    <div class="more-drawer-section-title">Navigate</div>
+    <a href="index.html" class="more-drawer-link"><div class="more-drawer-link-icon">🏠</div><span>Home</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="shop.html" class="more-drawer-link"><div class="more-drawer-link-icon">🛍️</div><span>Shop All Products</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="services.html" class="more-drawer-link"><div class="more-drawer-link-icon">💆‍♀️</div><span>Our Services</span><span class="more-drawer-link-arrow">›</span></a>
+  </div>
+  <div class="more-drawer-section">
+    <div class="more-drawer-section-title">Categories</div>
+    <a href="shop.html" class="more-drawer-link"><div class="more-drawer-link-icon">🧼</div><span>Soaps</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="shop.html" class="more-drawer-link"><div class="more-drawer-link-icon">🧴</div><span>Creams</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="shop.html" class="more-drawer-link"><div class="more-drawer-link-icon">✨</div><span>Scrubs</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="shop.html" class="more-drawer-link"><div class="more-drawer-link-icon">💧</div><span>Oils</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="shop.html" class="more-drawer-link"><div class="more-drawer-link-icon">💆</div><span>Hair Care</span><span class="more-drawer-link-arrow">›</span></a>
+  </div>
+  <div class="more-drawer-section">
+    <div class="more-drawer-section-title">Support</div>
+    <a href="https://wa.me/2348012345678" class="more-drawer-link" target="_blank"><div class="more-drawer-link-icon">💬</div><span>WhatsApp Us</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="#" class="more-drawer-link"><div class="more-drawer-link-icon">📦</div><span>Shipping Info</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="#" class="more-drawer-link"><div class="more-drawer-link-icon">↩️</div><span>Returns</span><span class="more-drawer-link-arrow">›</span></a>
+  </div>
+  <div class="more-drawer-section">
+    <div class="more-drawer-section-title">Follow Us</div>
+    <div class="more-drawer-social">
+      <a href="#" aria-label="Instagram">📸</a>
+      <a href="#" aria-label="Facebook">📘</a>
+      <a href="#" aria-label="TikTok">🎵</a>
+      <a href="https://wa.me/2348012345678" aria-label="WhatsApp">💬</a>
+    </div>
+  </div>
+  <div class="more-drawer-footer">&copy; 2025 LuxeGreen Cosmetics · Made with 🌿 in Nigeria</div>
+</div>
+
+<!-- ====== HERO ====== -->
+<section class="hero" aria-label="Featured collections">
+  <div class="hero-slides" id="heroSlides">
+
+    <div class="hero-slide active">
+      <div class="hero-slide-bg" style="background-color:#2d5a3d;background-image:url('images/hero/hero-1.jpg')"></div>
+      <div class="hero-slide-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-tag">New Collection 2025</div>
+        <h1 class="hero-title">Pure Nature,<br/><em>Radiant You</em></h1>
+        <p class="hero-desc">Handcrafted botanical skincare that nourishes from within. Discover the power of green beauty.</p>
+        <div class="hero-btns">
+          <a href="shop.html" class="btn-primary"><span>Shop Now</span></a>
+          <a href="services.html" class="btn-outline" style="color:var(--cream);border-color:rgba(250,246,240,0.5)">Our Services</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-color:#1a3a2a;background-image:url('images/hero/hero-2.jpg')"></div>
+      <div class="hero-slide-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-tag">Best Sellers</div>
+        <h1 class="hero-title">Glow Like<br/><em>Nature Intended</em></h1>
+        <p class="hero-desc">Premium botanical oils and serums formulated for every skin type. Cruelty-free, always.</p>
+        <div class="hero-btns">
+          <a href="shop.html" class="btn-primary"><span>Explore Oils</span></a>
+          <a href="shop.html" class="btn-outline" style="color:var(--cream);border-color:rgba(250,246,240,0.5)">View All</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-color:#3d6b4f;background-image:url('images/hero/hero-3.jpg')"></div>
+      <div class="hero-slide-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-tag">Hair Care Range</div>
+        <h1 class="hero-title">Stronger<br/><em>Healthier Hair</em></h1>
+        <p class="hero-desc">Transform your hair with our nutrient-rich hair care range. Infused with natural extracts.</p>
+        <div class="hero-btns">
+          <a href="shop.html" class="btn-primary"><span>Hair Collection</span></a>
+          <a href="services.html" class="btn-outline" style="color:var(--cream);border-color:rgba(250,246,240,0.5)">Book Treatment</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="hero-controls" id="heroControls">
+    <button class="hero-dot active" onclick="goSlide(0)"></button>
+    <button class="hero-dot" onclick="goSlide(1)"></button>
+    <button class="hero-dot" onclick="goSlide(2)"></button>
+  </div>
+  <div class="hero-arrows">
+    <button class="hero-arrow" onclick="prevSlide()" aria-label="Previous">&#8592;</button>
+    <button class="hero-arrow" onclick="nextSlide()" aria-label="Next">&#8594;</button>
+  </div>
+</section>
+
+<!-- ====== BEST SELLERS ====== -->
+<section class="section bestsellers" aria-labelledby="bestsellers-title">
+  <div class="section-header reveal">
+    <div class="section-tag">Customers Love These</div>
+    <h2 id="bestsellers-title">Best Sellers</h2>
+    <p>Our most-loved products, trusted by thousands of happy customers across Nigeria.</p>
+  </div>
+  <div class="carousel-wrapper reveal">
+    <button class="carousel-btn carousel-btn-prev" id="bsPrev" aria-label="Previous">&#8592;</button>
+    <div class="carousel-track-container">
+      <div class="carousel-track" id="bsTrack">
+        <!-- Populated by JS from Firebase -->
+        <div class="product-card skeleton-card" style="background:var(--green-mist);height:360px;border-radius:var(--radius-lg)"></div>
+        <div class="product-card skeleton-card" style="background:var(--green-mist);height:360px;border-radius:var(--radius-lg)"></div>
+        <div class="product-card skeleton-card" style="background:var(--green-mist);height:360px;border-radius:var(--radius-lg)"></div>
+        <div class="product-card skeleton-card" style="background:var(--green-mist);height:360px;border-radius:var(--radius-lg)"></div>
+      </div>
+    </div>
+    <button class="carousel-btn carousel-btn-next" id="bsNext" aria-label="Next">&#8594;</button>
+  </div>
+</section>
+
+<!-- ====== SERVICES PREVIEW ====== -->
+<section class="section-sm services-preview" aria-labelledby="services-title">
+  <div class="section-header reveal">
+    <div class="section-tag">What We Offer</div>
+    <h2 id="services-title" style="color:var(--cream)">Our Services</h2>
+    <p style="color:rgba(250,246,240,0.7)">From personalized skincare consultations to luxurious spa treatments.</p>
+  </div>
+  <div class="services-grid reveal">
+
+    <div class="service-card-preview" onclick="location.href='services.html'">
+      <img src="images/services/facial.jpg" alt="Facial Treatment" class="service-preview-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div style="display:none;height:110px;background:linear-gradient(135deg,#e8f5ec,#a8d5b5);align-items:center;justify-content:center;font-size:2.2rem;border-radius:var(--radius-md) var(--radius-md) 0 0">💆‍♀️</div>
+      <div class="svc-body">
+        <h4>Facial Treatments</h4>
+        <p>Deep cleansing, hydrating, and anti-aging facials tailored to your skin type.</p>
+      </div>
+    </div>
+
+    <div class="service-card-preview" onclick="location.href='services.html'">
+      <img src="images/services/consultation.jpg" alt="Skin Consultation" class="service-preview-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div style="display:none;height:110px;background:linear-gradient(135deg,#fef9ec,#e8c98a);align-items:center;justify-content:center;font-size:2.2rem;border-radius:var(--radius-md) var(--radius-md) 0 0">🔬</div>
+      <div class="svc-body">
+        <h4>Skin Consultation</h4>
+        <p>Expert analysis and personalized skincare routine recommendations.</p>
+      </div>
+    </div>
+
+    <div class="service-card-preview" onclick="location.href='services.html'">
+      <img src="images/services/scrub.jpg" alt="Body Scrub" class="service-preview-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div style="display:none;height:110px;background:linear-gradient(135deg,#f0e8d8,#e8d9c0);align-items:center;justify-content:center;font-size:2.2rem;border-radius:var(--radius-md) var(--radius-md) 0 0">✨</div>
+      <div class="svc-body">
+        <h4>Body Scrub & Wrap</h4>
+        <p>Full body exfoliation and nourishing wraps for silky-smooth skin.</p>
+      </div>
+    </div>
+
+    <div class="service-card-preview" onclick="location.href='services.html'">
+      <img src="images/services/hair.jpg" alt="Hair Spa" class="service-preview-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div style="display:none;height:110px;background:linear-gradient(135deg,#e8f5ec,#4a8c5c);align-items:center;justify-content:center;font-size:2.2rem;border-radius:var(--radius-md) var(--radius-md) 0 0">💆</div>
+      <div class="svc-body">
+        <h4>Hair Spa</h4>
+        <p>Intensive hair treatments with natural oils and botanical extracts.</p>
+      </div>
+    </div>
+
+  </div>
+  <div style="text-align:center;margin-top:32px" class="reveal">
+    <a href="services.html" class="btn-gold">View All Services</a>
+  </div>
+</section>
+
+<!-- ====== WHY CHOOSE US ====== -->
+<section class="section why-us" aria-labelledby="why-title">
+  <div class="section-header reveal">
+    <div class="section-tag">Our Promise</div>
+    <h2 id="why-title">Why Choose LuxeGreen?</h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal reveal-delay-1">
+      <div class="why-icon">🌱</div>
+      <h4>100% Natural</h4>
+      <p>Every product crafted from premium natural and organic ingredients. No harmful chemicals, ever.</p>
+    </div>
+    <div class="why-card reveal reveal-delay-2">
+      <div class="why-icon">🚚</div>
+      <h4>Fast Delivery</h4>
+      <p>Same-day delivery in Lagos. Nationwide delivery within 2–4 business days.</p>
+    </div>
+    <div class="why-card reveal reveal-delay-3">
+      <div class="why-icon">🔬</div>
+      <h4>Dermatologist Tested</h4>
+      <p>All formulations tested and approved for all skin types including sensitive skin.</p>
+    </div>
+    <div class="why-card reveal reveal-delay-4">
+      <div class="why-icon">♻️</div>
+      <h4>Eco-Friendly</h4>
+      <p>Sustainable packaging and cruelty-free formulations. Beautiful products, clean conscience.</p>
+    </div>
+    <div class="why-card reveal reveal-delay-1">
+      <div class="why-icon">💎</div>
+      <h4>Premium Quality</h4>
+      <p>Luxury formulations at accessible prices. Skincare that actually works.</p>
+    </div>
+    <div class="why-card reveal reveal-delay-2">
+      <div class="why-icon">🤝</div>
+      <h4>Expert Support</h4>
+      <p>Our skincare experts are always available to help you find your perfect routine.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== TESTIMONIALS ====== -->
+<section class="section testimonials" aria-labelledby="testimonials-title">
+  <div class="section-header reveal">
+    <div class="section-tag">Happy Customers</div>
+    <h2 id="testimonials-title">What They're Saying</h2>
+    <p>Real results from real people. See what our community loves about LuxeGreen.</p>
+  </div>
+  <div class="carousel-wrapper reveal">
+    <button class="carousel-btn carousel-btn-prev" id="testPrev" aria-label="Previous">&#8592;</button>
+    <div class="testimonials-track-container">
+      <div class="testimonials-track" id="testTrack">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">I've been using the Shea Butter Cream for 3 months and my skin has never felt this soft! Absolutely love LuxeGreen.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">👩🏾</div>
+            <div><div class="testimonial-name">Adaeze Okonkwo</div><div class="testimonial-loc">Lagos, Nigeria</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">The facial scrub is absolutely divine! My skin glows like never before. Fast delivery too. Will definitely reorder!</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">👩🏽</div>
+            <div><div class="testimonial-name">Fatima Bello</div><div class="testimonial-loc">Abuja, Nigeria</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">Their natural hair oil is a game changer. My hair has grown so much. LuxeGreen is the real deal!</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">👩🏿</div>
+            <div><div class="testimonial-name">Chidinma Eze</div><div class="testimonial-loc">Port Harcourt, Nigeria</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★☆</div>
+          <p class="testimonial-text">The service at LuxeGreen is exceptional. Had a facial treatment last week and my skin looked amazing. 10/10 recommend.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">👩🏾</div>
+            <div><div class="testimonial-name">Ngozi Adeleke</div><div class="testimonial-loc">Enugu, Nigeria</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">Finally a Nigerian brand that understands our skin! The turmeric soap cleared my dark spots in 2 weeks. Incredible!</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">👩🏾</div>
+            <div><div class="testimonial-name">Blessing Osei</div><div class="testimonial-loc">Ibadan, Nigeria</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-btn carousel-btn-next" id="testNext" aria-label="Next">&#8594;</button>
+  </div>
+</section>
+
+<!-- ====== PROMO BANNER ====== -->
+<section class="promo-banner reveal" aria-label="Special offer">
+  <div class="promo-text">
+    <div class="promo-badge">Limited Time Offer</div>
+    <h2>Get 20% Off Your<br/>First Order</h2>
+    <p>Use code <strong style="color:var(--gold-light)">LUXENEW20</strong> at checkout</p>
+  </div>
+  <a href="shop.html" class="btn-gold" style="position:relative;z-index:1">Shop & Save Now</a>
+</section>
+
+<!-- ====== NEWSLETTER ====== -->
+<section class="newsletter reveal" aria-label="Newsletter signup">
+  <div class="section-tag" style="justify-content:center;margin-bottom:14px"><span style="display:none"></span>Stay in the Loop</div>
+  <h2>Join the LuxeGreen Community</h2>
+  <p>Subscribe for exclusive offers, skincare tips, and early access to new launches.</p>
+  <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+    <input type="email" placeholder="Enter your email address" required aria-label="Email address"/>
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="margin-bottom:4px">
+        <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21c1.69-1.19 3.43-2.25 5.18-3C9 17 10 14 17 8z"/><path d="M21 3c0 0-5 2-10 7-1.5 1.5-2.5 3.5-3 5.5 2.4-.6 5.4-2 8-5.5C18.5 8.5 21 3 21 3z"/></svg></div>
+        <span class="nav-logo-text" style="color:var(--cream)">Luxe<span>Green</span></span>
+      </a>
+      <p>Premium natural cosmetics crafted for radiant, healthy skin. Rooted in nature, perfected by science.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram">📸</a>
+        <a href="#" aria-label="Facebook">📘</a>
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="https://wa.me/2348012345678" aria-label="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Shop</h5>
+      <ul>
+        <li><a href="shop.html">All Products</a></li>
+        <li><a href="shop.html#soaps">Soaps</a></li>
+        <li><a href="shop.html#creams">Creams</a></li>
+        <li><a href="shop.html#scrubs">Scrubs</a></li>
+        <li><a href="shop.html#oils">Oils</a></li>
+        <li><a href="shop.html#hair-care">Hair Care</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Support</h5>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="https://wa.me/2348012345678">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 LuxeGreen Cosmetics. All rights reserved.</p>
+    <p>Made with 🌿 in Nigeria</p>
+  </div>
+</footer>
+
+<!-- ====== CART SIDEBAR ====== -->
+<aside class="cart-sidebar" id="cartSidebar" aria-label="Shopping cart">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button class="cart-close" onclick="toggleCart()" aria-label="Close cart">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span>Total</span>
+      <strong id="cartTotal">₦0</strong>
+    </div>
+    <div class="cart-actions">
+      <button class="btn-whatsapp" onclick="checkoutWhatsApp()">
+        💬 Order via WhatsApp
+      </button>
+      <button class="btn-primary" onclick="openCheckout()" style="justify-content:center">
+        <span>💳 Pay with Card</span>
+      </button>
+    </div>
+  </div>
+</aside>
+<div class="nav-overlay" id="cartOverlay" onclick="toggleCart()" style="z-index:1900"></div>
+
+<!-- ====== CHECKOUT MODAL ====== -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <h2>Choose Payment</h2>
+    <p style="color:var(--text-mid);font-size:0.88rem;margin-bottom:20px">Select your preferred payment method</p>
+    <div class="checkout-methods">
+      <div class="checkout-method" onclick="checkoutWhatsApp()">
+        <div class="checkout-method-icon">💬</div>
+        <div class="checkout-method-info">
+          <h4>WhatsApp Order</h4>
+          <p>Send your order via WhatsApp for quick processing</p>
+        </div>
+      </div>
+      <div class="checkout-method" id="cardMethodBtn" onclick="showCardForm()">
+        <div class="checkout-method-icon">💳</div>
+        <div class="checkout-method-info">
+          <h4>Card Payment</h4>
+          <p>Pay securely with debit/credit card</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-payment-form" id="cardPaymentForm" style="display:none">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="John Doe"/>
+      </div>
+      <div class="form-group">
+        <label>Card Number</label>
+        <input type="text" placeholder="1234 5678 9012 3456" maxlength="19"/>
+      </div>
+      <div class="card-row">
+        <div class="form-group">
+          <label>Expiry</label>
+          <input type="text" placeholder="MM/YY" maxlength="5"/>
+        </div>
+        <div class="form-group">
+          <label>CVV</label>
+          <input type="text" placeholder="123" maxlength="3"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="+234 800 000 0000"/>
+      </div>
+      <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="processCardPayment()">
+        <span>Pay <span id="cardPayTotal"></span></span>
+      </button>
+    </div>
+    <button onclick="closeCheckout()" style="margin-top:16px;color:var(--text-mid);font-size:0.85rem;display:block;margin-left:auto">Cancel</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { getProducts, getCart, addToCart, removeFromCart, updateCartQty, getCartTotal, getCartCount,
+         openWhatsApp, showToast, initReveal, initCarousel, fmt, WHATSAPP_NUMBER } from './js/firebase.js';
+
+// ============================================ NAVBAR
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) {
+    navbar.classList.add('scrolled');
+    navbar.classList.remove('dark-nav');
+  } else {
+    navbar.classList.remove('scrolled');
+    navbar.classList.add('dark-nav');
+  }
+});
+
+// ============================================ MOBILE BOTTOM NAV
+window.openMoreDrawer = () => {
+  document.getElementById('moreDrawer').classList.add('open');
+  document.getElementById('mobOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+window.closeMoreDrawer = () => {
+  document.getElementById('moreDrawer').classList.remove('open');
+  document.getElementById('mobOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+};
+// Desktop search (redirects to shop)
+window.handleDesktopSearch = (val) => {
+  if (val.length > 1) {
+    clearTimeout(window._searchTimer);
+    window._searchTimer = setTimeout(() => {
+      window.location.href = `shop.html?search=${encodeURIComponent(val)}`;
+    }, 700);
+  }
+};
+
+// ============================================ HERO SLIDER
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const dots = document.querySelectorAll('.hero-dot');
+let slideTimer;
+
+function showSlide(n) {
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('active');
+  currentSlide = (n + slides.length) % slides.length;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+}
+
+function startSlider() { slideTimer = setInterval(() => showSlide(currentSlide + 1), 5500); }
+function resetTimer() { clearInterval(slideTimer); startSlider(); }
+
+window.goSlide = (n) => { showSlide(n); resetTimer(); };
+window.nextSlide = () => { showSlide(currentSlide + 1); resetTimer(); };
+window.prevSlide = () => { showSlide(currentSlide - 1); resetTimer(); };
+startSlider();
+
+// ============================================ BEST SELLERS
+async function loadBestSellers() {
+  const track = document.getElementById('bsTrack');
+  try {
+    const products = await getProducts();
+    const featured = products.filter(p => p.featured || p.bestSeller).slice(0, 8);
+    const display = featured.length > 0 ? featured : products.slice(0, 8);
+
+    if (display.length === 0) {
+      track.innerHTML = `<div style="padding:40px;color:var(--text-light);text-align:center;width:100%">No products yet. Add some in the admin panel!</div>`;
+      return;
+    }
+    track.innerHTML = display.map(p => renderProductCard(p)).join('');
+    track.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('click', () => openProductModal(card.dataset.id, display));
+    });
+    track.querySelectorAll('.btn-add-cart').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.product-card');
+        const id = card.dataset.id;
+        const product = display.find(p => p.id === id);
+        if (product) { addToCart(product, 1); showToast(`${product.name} added to cart!`); renderCart(); }
+      });
+    });
+    initCarousel(track, document.getElementById('bsPrev'), document.getElementById('bsNext'));
+  } catch(e) {
+    track.innerHTML = `<div style="padding:40px;text-align:center;width:100%;color:var(--text-light)">Loading products...</div>`;
+  }
+}
+
+// ============================================ TESTIMONIALS
+initCarousel(
+  document.getElementById('testTrack'),
+  document.getElementById('testPrev'),
+  document.getElementById('testNext'),
+  3
+);
+
+// ============================================ RENDER PRODUCT CARD
+window.renderProductCard = function(p) {
+  const img = (p.images && p.images[0]) ? p.images[0] : 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&q=80';
+  const badge = p.badge ? `<div class="product-badge badge-${p.badge.toLowerCase()}">${p.badge}</div>` : '';
+  const oldPrice = p.oldPrice ? `<span class="price-old">${fmt(p.oldPrice)}</span>` : '';
+  return `
+    <div class="product-card" data-id="${p.id}">
+      <div class="product-card-img">
+        <img src="${img}" alt="${p.name}" loading="lazy"/>
+        ${badge}
+        <button class="product-card-wishlist" onclick="event.stopPropagation()" title="Add to wishlist">♡</button>
+      </div>
+      <div class="product-card-body">
+        <div class="product-card-cat">${p.category || 'Skincare'}</div>
+        <div class="product-card-name">${p.name}</div>
+        <div class="product-card-price">
+          <span class="price-current">${fmt(p.price)}</span>
+          ${oldPrice}
+        </div>
+      </div>
+      <div class="product-card-footer">
+        <button class="btn-add-cart">Add to Cart</button>
+      </div>
+    </div>`;
+};
+
+// ============================================ PRODUCT MODAL
+let allProducts = [];
+window.openProductModal = async function(productId, products) {
+  allProducts = products || allProducts;
+  const product = allProducts.find(p => p.id === productId);
+  if (!product) return;
+
+  const img1 = (product.images && product.images[0]) ? product.images[0] : 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80';
+  const img2 = (product.images && product.images[1]) ? product.images[1] : img1;
+  const related = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+
+  let overlay = document.getElementById('productModalOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'productModalOverlay';
+    overlay.className = 'modal-overlay';
+    overlay.addEventListener('click', (e) => { if(e.target === overlay) closeProductModal(); });
+    document.body.appendChild(overlay);
+  }
+
+  overlay.innerHTML = `
+    <div class="product-modal" role="dialog" aria-modal="true" aria-label="${product.name}">
+      <button class="modal-close" onclick="closeProductModal()" aria-label="Close">✕</button>
+      <div class="modal-images">
+        <div class="modal-img-main" id="modalImgMain">
+          <div class="modal-img-main-container" id="imgContainer">
+            <img src="${img1}" alt="${product.name} - Image 1"/>
+            <img src="${img2}" alt="${product.name} - Image 2"/>
+          </div>
+        </div>
+        <div class="modal-img-arrows">
+          <button class="modal-img-arrow" onclick="slideModalImg(0)" title="Image 1">❮</button>
+          <button class="modal-img-arrow" onclick="slideModalImg(1)" title="Image 2">❯</button>
+        </div>
+        <div class="modal-img-scroll-hint">← Swipe to see more →</div>
+      </div>
+      <div class="modal-info">
+        <div class="modal-cat">${product.category || 'Skincare'}</div>
+        <h2 class="modal-name">${product.name}</h2>
+        <div class="modal-stars">★★★★★ <span style="color:var(--text-light);font-size:0.8rem">(${Math.floor(Math.random()*50)+20} reviews)</span></div>
+        <div class="modal-price">
+          <span class="modal-price-current">${fmt(product.price)}</span>
+          ${product.oldPrice ? `<span class="modal-price-old">${fmt(product.oldPrice)}</span>` : ''}
+        </div>
+        <p class="modal-desc">${product.description || 'A premium natural beauty product crafted with the finest botanical ingredients for your skin care routine.'}</p>
+        <div class="modal-divider"></div>
+        <div class="modal-qty-row">
+          <span style="font-size:0.85rem;font-weight:600;color:var(--text-mid)">Quantity:</span>
+          <div class="modal-qty">
+            <button onclick="changeModalQty(-1)">−</button>
+            <span id="modalQty">1</span>
+            <button onclick="changeModalQty(1)">+</button>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary" style="justify-content:center" onclick="addModalToCart('${product.id}')">
+            <span>Add to Cart</span>
+          </button>
+          <button class="btn-whatsapp" onclick="buyNowWhatsApp('${product.id}')">
+            💬 Buy via WhatsApp
+          </button>
+        </div>
+        ${related.length > 0 ? `
+        <div class="modal-related">
+          <h4>You May Also Like</h4>
+          <div class="related-grid">
+            ${related.map(r => `
+              <div class="related-card" onclick="openProductModal('${r.id}')">
+                <img src="${(r.images && r.images[0]) ? r.images[0] : 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=200&q=80'}" alt="${r.name}" loading="lazy"/>
+                <div class="related-card-info">
+                  <div class="related-card-name">${r.name}</div>
+                  <div class="related-card-price">${fmt(r.price)}</div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>` : ''}
+      </div>
+    </div>`;
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  window._currentModalProduct = product;
+  window._modalQty = 1;
+};
+
+window.closeProductModal = () => {
+  document.getElementById('productModalOverlay')?.classList.remove('open');
+  document.body.style.overflow = '';
+};
+
+window.slideModalImg = (idx) => {
+  const container = document.getElementById('imgContainer');
+  if (container) container.style.transform = `translateX(-${idx * 50}%)`;
+};
+
+window.changeModalQty = (delta) => {
+  window._modalQty = Math.max(1, (window._modalQty || 1) + delta);
+  document.getElementById('modalQty').textContent = window._modalQty;
+};
+
+window.addModalToCart = (id) => {
+  const product = allProducts.find(p => p.id === id);
+  if (product) {
+    addToCart(product, window._modalQty || 1);
+    showToast(`${product.name} added to cart!`);
+    renderCart();
+    closeProductModal();
+  }
+};
+
+window.buyNowWhatsApp = (id) => {
+  const product = allProducts.find(p => p.id === id);
+  if (product) {
+    const qty = window._modalQty || 1;
+    const msg = encodeURIComponent(`🌿 *LuxeGreen Order*\n\n• ${product.name} x${qty} — ${fmt(product.price * qty)}\n\nPlease confirm my order. Thank you!`);
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+  }
+};
+
+// ============================================ CART
+window.toggleCart = () => {
+  document.getElementById('cartSidebar').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('cartSidebar').classList.contains('open') ? 'hidden' : '';
+};
+
+window.renderCart = function() {
+  const cart = getCart();
+  const cartItems = document.getElementById('cartItems');
+  const cartFooter = document.getElementById('cartFooter');
+  const count = getCartCount();
+  // Update both badges
+  document.getElementById('cartBadge').textContent = count;
+  const mob = document.getElementById('mobCartBadge');
+  if (mob) { mob.textContent = count; mob.style.display = count > 0 ? 'flex' : 'none'; }
+
+  if (cart.length === 0) {
+    cartItems.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Your cart is empty.<br/>Start shopping!</p><br/><a href="shop.html" class="btn-primary" style="display:inline-flex;justify-content:center" onclick="toggleCart()"><span>Browse Products</span></a></div>`;
+    cartFooter.style.display = 'none';
+    return;
+  }
+
+  cartFooter.style.display = 'block';
+  document.getElementById('cartTotal').textContent = fmt(getCartTotal());
+  cartItems.innerHTML = cart.map(item => {
+    const img = (item.images && item.images[0]) ? item.images[0] : 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=120&q=80';
+    return `
+      <div class="cart-item">
+        <img class="cart-item-img" src="${img}" alt="${item.name}"/>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">${fmt(item.price)}</div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+            <span class="cart-item-remove" onclick="removeItem('${item.id}')">✕ Remove</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+};
+
+window.changeQty = (id, delta) => { const cart = getCart(); const item = cart.find(i => i.id === id); if(item) updateCartQty(id, item.qty + delta); renderCart(); };
+window.removeItem = (id) => { removeFromCart(id); renderCart(); showToast('Item removed from cart', 'info'); };
+
+window.checkoutWhatsApp = () => { openWhatsApp(getCart()); closeCheckout(); };
+window.openCheckout = () => {
+  document.getElementById('checkoutOverlay').classList.add('open');
+  document.getElementById('cardPayTotal').textContent = fmt(getCartTotal());
+  document.getElementById('cardPaymentForm').style.display = 'none';
+};
+window.closeCheckout = () => document.getElementById('checkoutOverlay').classList.remove('open');
+window.showCardForm = () => { document.getElementById('cardPaymentForm').style.display = 'block'; document.getElementById('cardMethodBtn').style.display = 'none'; };
+window.processCardPayment = () => { showToast('Payment gateway integration ready! Connect Paystack or Flutterwave.', 'info'); closeCheckout(); };
+
+window.addEventListener('cartUpdated', renderCart);
+
+// ============================================ NEWSLETTER
+window.handleNewsletter = async (e) => {
+  e.preventDefault();
+  showToast('Thank you for subscribing! 🌿', 'success');
+  e.target.reset();
+};
+
+// ============================================ INIT
+initReveal();
+loadBestSellers();
+renderCart();
+</script>
+</body>
+</html>

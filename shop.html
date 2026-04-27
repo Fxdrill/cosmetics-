@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop — LuxeGreen Cosmetics | Natural Skincare Products</title>
+  <meta name="description" content="Shop LuxeGreen's full range of natural soaps, creams, scrubs, oils, and hair care products. Filter by category and price for your perfect skincare routine."/>
+  <meta name="keywords" content="natural soap Nigeria, organic cream, body scrub, hair oil, skincare shop"/>
+  <link rel="canonical" href="https://luxegreen.vercel.app/shop.html"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a3a2a'/><text y='.9em' font-size='60' x='20'>🌿</text></svg>"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="scrolled">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#faf6f0"><path d="M17 8C8 10 5.9 16.17 3.82 21c1.69-1.19 3.43-2.25 5.18-3C9 17 10 14 17 8z"/><path d="M21 3c0 0-5 2-10 7-1.5 1.5-2.5 3.5-3 5.5 2.4-.6 5.4-2 8-5.5C18.5 8.5 21 3 21 3z"/></svg></div>
+    <span class="nav-logo-text">Luxe<span>Green</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html" class="active">Shop</a></li>
+    <li><a href="services.html">Services</a></li>
+  </ul>
+  <div class="nav-search-wrap">
+    <svg class="srch-ico" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="search" placeholder="Search products…" id="desktopSearch" oninput="handleDesktopSearch(this.value)" autocomplete="off"/>
+  </div>
+  <div class="nav-icons">
+    <button class="nav-icon-btn" onclick="toggleCart()" aria-label="Cart">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <div class="mobile-bottom-nav-inner">
+    <a href="index.html" class="mob-nav-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="mob-label">Home</span>
+    </a>
+    <a href="shop.html" class="mob-nav-item active">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="mob-label">Shop</span>
+    </a>
+    <a href="services.html" class="mob-nav-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span class="mob-label">Services</span>
+    </a>
+    <button class="mob-nav-item" onclick="toggleCart()" aria-label="Cart">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/></svg>
+      <span class="mob-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none">0</span>
+    </button>
+    <button class="mob-nav-item" onclick="openMoreDrawer()" aria-label="More">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span class="mob-label">More</span>
+    </button>
+  </div>
+</nav>
+
+<!-- MORE DRAWER -->
+<div class="mob-overlay" id="mobOverlay" onclick="closeMoreDrawer()"></div>
+<div class="more-drawer" id="moreDrawer">
+  <div class="more-drawer-handle"></div>
+  <div class="more-drawer-head">
+    <div class="more-drawer-head-logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="#faf6f0"><path d="M17 8C8 10 5.9 16.17 3.82 21c1.69-1.19 3.43-2.25 5.18-3C9 17 10 14 17 8z"/><path d="M21 3c0 0-5 2-10 7-1.5 1.5-2.5 3.5-3 5.5 2.4-.6 5.4-2 8-5.5C18.5 8.5 21 3 21 3z"/></svg></div>
+    <div><h3 style="font-family:var(--font-display);font-size:1.1rem;color:var(--green-deep)">LuxeGreen</h3><p style="font-size:0.72rem;color:var(--text-light)">Natural Beauty, Redefined</p></div>
+  </div>
+  <div class="more-drawer-section">
+    <div class="more-drawer-section-title">Navigate</div>
+    <a href="index.html" class="more-drawer-link"><div class="more-drawer-link-icon">🏠</div><span>Home</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="shop.html" class="more-drawer-link"><div class="more-drawer-link-icon">🛍️</div><span>Shop All Products</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="services.html" class="more-drawer-link"><div class="more-drawer-link-icon">💆‍♀️</div><span>Our Services</span><span class="more-drawer-link-arrow">›</span></a>
+  </div>
+  <div class="more-drawer-section">
+    <div class="more-drawer-section-title">Categories</div>
+    <a href="#soaps" class="more-drawer-link" onclick="closeMoreDrawer();filterCategory('Soaps');return false;"><div class="more-drawer-link-icon">🧼</div><span>Soaps</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="#creams" class="more-drawer-link" onclick="closeMoreDrawer();filterCategory('Creams');return false;"><div class="more-drawer-link-icon">🧴</div><span>Creams</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="#scrubs" class="more-drawer-link" onclick="closeMoreDrawer();filterCategory('Scrubs');return false;"><div class="more-drawer-link-icon">✨</div><span>Scrubs</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="#oils" class="more-drawer-link" onclick="closeMoreDrawer();filterCategory('Oils');return false;"><div class="more-drawer-link-icon">💧</div><span>Oils</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="#hair-care" class="more-drawer-link" onclick="closeMoreDrawer();filterCategory('Hair Care');return false;"><div class="more-drawer-link-icon">💆</div><span>Hair Care</span><span class="more-drawer-link-arrow">›</span></a>
+  </div>
+  <div class="more-drawer-section">
+    <div class="more-drawer-section-title">Support</div>
+    <a href="https://wa.me/2348012345678" class="more-drawer-link" target="_blank"><div class="more-drawer-link-icon">💬</div><span>WhatsApp Us</span><span class="more-drawer-link-arrow">›</span></a>
+    <a href="#" class="more-drawer-link"><div class="more-drawer-link-icon">📦</div><span>Shipping Info</span><span class="more-drawer-link-arrow">›</span></a>
+  </div>
+  <div class="more-drawer-footer">&copy; 2025 LuxeGreen Cosmetics · Made with 🌿 in Nigeria</div>
+</div>
+
+<!-- SHOP LAYOUT -->
+<div class="shop-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="shop-sidebar" id="shopSidebar">
+    <h3 class="sidebar-title">Filter Products</h3>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Categories</div>
+      <ul class="category-list" id="sidebarCats">
+        <li class="category-item active" data-cat="All" onclick="filterCategory('All', this)">
+          All Products <span class="category-count" id="catCount-All">0</span>
+        </li>
+        <li class="category-item" data-cat="Soaps" onclick="filterCategory('Soaps', this)">
+          🧼 Soaps <span class="category-count" id="catCount-Soaps">0</span>
+        </li>
+        <li class="category-item" data-cat="Creams" onclick="filterCategory('Creams', this)">
+          🧴 Creams <span class="category-count" id="catCount-Creams">0</span>
+        </li>
+        <li class="category-item" data-cat="Scrubs" onclick="filterCategory('Scrubs', this)">
+          ✨ Scrubs <span class="category-count" id="catCount-Scrubs">0</span>
+        </li>
+        <li class="category-item" data-cat="Oils" onclick="filterCategory('Oils', this)">
+          💧 Oils <span class="category-count" id="catCount-Oils">0</span>
+        </li>
+        <li class="category-item" data-cat="Hair Care" onclick="filterCategory('Hair Care', this)">
+          💆‍♀️ Hair Care <span class="category-count" id="catCount-Hair Care">0</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Price Range</div>
+      <div class="price-filter">
+        <input type="range" class="price-range" id="priceRange" min="0" max="50000" step="500" value="50000" oninput="onPriceChange(this.value)"/>
+        <div class="price-labels">
+          <span>₦0</span>
+          <span id="priceLabel">₦50,000</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Sort By</div>
+      <ul class="category-list">
+        <li class="category-item active" id="sortNewest" onclick="setSort('newest', this)">Newest First</li>
+        <li class="category-item" id="sortLow" onclick="setSort('low', this)">Price: Low to High</li>
+        <li class="category-item" id="sortHigh" onclick="setSort('high', this)">Price: High to Low</li>
+      </ul>
+    </div>
+
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="applyFilters()">
+      <span>Apply Filters</span>
+    </button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="shop-main">
+    <div class="shop-header">
+      <h1 class="shop-title">Our Products</h1>
+      <div class="shop-controls">
+        <button class="shop-filter-toggle" onclick="toggleMobileSidebar()">
+          ⚙️ Filters
+        </button>
+        <select class="shop-sort" id="shopSort" onchange="setSort(this.value)">
+          <option value="newest">Newest</option>
+          <option value="low">Price ↑</option>
+          <option value="high">Price ↓</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- CATEGORY TABS -->
+    <div class="shop-cat-tabs" id="shopCatTabs">
+      <button class="shop-cat-tab active" data-cat="All" onclick="filterCategory('All', this)">All</button>
+      <button class="shop-cat-tab" data-cat="Soaps" onclick="filterCategory('Soaps', this)">🧼 Soaps</button>
+      <button class="shop-cat-tab" data-cat="Creams" onclick="filterCategory('Creams', this)">🧴 Creams</button>
+      <button class="shop-cat-tab" data-cat="Scrubs" onclick="filterCategory('Scrubs', this)">✨ Scrubs</button>
+      <button class="shop-cat-tab" data-cat="Oils" onclick="filterCategory('Oils', this)">💧 Oils</button>
+      <button class="shop-cat-tab" data-cat="Hair Care" onclick="filterCategory('Hair Care', this)">💆‍♀️ Hair Care</button>
+    </div>
+
+    <!-- PRODUCTS BY CATEGORY -->
+    <div id="shopProductsContainer">
+      <div style="text-align:center;padding:60px 20px;color:var(--text-light)">
+        <div style="font-size:2rem;margin-bottom:12px">🌿</div>
+        <p>Loading products...</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- CART SIDEBAR -->
+<aside class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span>Total</span>
+      <strong id="cartTotal">₦0</strong>
+    </div>
+    <div class="cart-actions">
+      <button class="btn-whatsapp" onclick="checkoutWhatsApp()">💬 Order via WhatsApp</button>
+      <button class="btn-primary" onclick="openCheckout()" style="justify-content:center"><span>💳 Pay with Card</span></button>
+    </div>
+  </div>
+</aside>
+<div class="nav-overlay" id="cartOverlay" onclick="toggleCart()" style="z-index:1900"></div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <h2>Choose Payment</h2>
+    <p style="color:var(--text-mid);font-size:0.88rem;margin-bottom:20px">Select your preferred payment method</p>
+    <div class="checkout-methods">
+      <div class="checkout-method" onclick="checkoutWhatsApp()">
+        <div class="checkout-method-icon">💬</div>
+        <div class="checkout-method-info"><h4>WhatsApp Order</h4><p>Send your order via WhatsApp</p></div>
+      </div>
+      <div class="checkout-method" id="cardMethodBtn" onclick="showCardForm()">
+        <div class="checkout-method-icon">💳</div>
+        <div class="checkout-method-info"><h4>Card Payment</h4><p>Pay securely with debit/credit card</p></div>
+      </div>
+    </div>
+    <div class="card-payment-form" id="cardPaymentForm" style="display:none">
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Doe"/></div>
+      <div class="form-group"><label>Card Number</label><input type="text" placeholder="1234 5678 9012 3456" maxlength="19"/></div>
+      <div class="card-row">
+        <div class="form-group"><label>Expiry</label><input type="text" placeholder="MM/YY" maxlength="5"/></div>
+        <div class="form-group"><label>CVV</label><input type="text" placeholder="123" maxlength="3"/></div>
+      </div>
+      <div class="form-group"><label>Phone</label><input type="tel" placeholder="+234 800 000 0000"/></div>
+      <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="processCardPayment()">
+        <span>Pay <span id="cardPayTotal"></span></span>
+      </button>
+    </div>
+    <button onclick="closeCheckout()" style="margin-top:16px;color:var(--text-mid);font-size:0.85rem;display:block;margin-left:auto">Cancel</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer style="background:var(--green-deep);padding:30px 5%;text-align:center">
+  <p style="color:rgba(250,246,240,0.5);font-size:0.8rem">&copy; 2025 LuxeGreen Cosmetics. All rights reserved.</p>
+</footer>
+
+<script type="module">
+import { getProducts, getCart, addToCart, removeFromCart, updateCartQty,
+         getCartTotal, getCartCount, openWhatsApp, showToast, initReveal,
+         initCarousel, fmt, WHATSAPP_NUMBER } from './js/firebase.js';
+
+// ============================================ NAVBAR
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 10);
+});
+
+window.openMoreDrawer = () => {
+  document.getElementById('moreDrawer').classList.add('open');
+  document.getElementById('mobOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+window.closeMoreDrawer = () => {
+  document.getElementById('moreDrawer').classList.remove('open');
+  document.getElementById('mobOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+};
+window.handleDesktopSearch = (val) => {
+  clearTimeout(window._searchTimer);
+  if (val.length > 1) {
+    window._searchTimer = setTimeout(() => filterTable(val), 400);
+  } else if (!val) {
+    renderShopSections();
+  }
+};
+
+// ============================================ STATE
+let allProducts = [];
+let currentCategory = 'All';
+let currentSort = 'newest';
+let maxPrice = 50000;
+let carouselInstances = {};
+
+// ============================================ LOAD PRODUCTS
+async function loadShopProducts() {
+  try {
+    allProducts = await getProducts();
+    updateCategoryCounts();
+    renderShopSections();
+    // Handle URL hash for direct category links
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      const catName = hash.replace('-', ' ');
+      const match = ['Soaps','Creams','Scrubs','Oils','Hair Care'].find(c => c.toLowerCase() === catName.toLowerCase());
+      if (match) setTimeout(() => filterCategory(match), 100);
+    }
+  } catch (e) {
+    document.getElementById('shopProductsContainer').innerHTML =
+      `<div style="text-align:center;padding:60px;color:var(--text-light)">
+        <div style="font-size:2.5rem;margin-bottom:14px">🌿</div>
+        <p>Add your first products in the Admin Panel!</p>
+        <br/><a href="admin.html" class="btn-primary" style="display:inline-flex;justify-content:center"><span>Go to Admin</span></a>
+      </div>`;
+  }
+}
+
+function updateCategoryCounts() {
+  const cats = ['All', 'Soaps', 'Creams', 'Scrubs', 'Oils', 'Hair Care'];
+  cats.forEach(cat => {
+    const el = document.getElementById(`catCount-${cat}`);
+    if (el) {
+      el.textContent = cat === 'All' ? allProducts.length : allProducts.filter(p => p.category === cat).length;
+    }
+  });
+}
+
+// ============================================ RENDER SECTIONS
+function renderShopSections() {
+  const container = document.getElementById('shopProductsContainer');
+  const cats = currentCategory === 'All'
+    ? ['Soaps', 'Creams', 'Scrubs', 'Oils', 'Hair Care']
+    : [currentCategory];
+
+  let html = '';
+  cats.forEach(cat => {
+    let products = allProducts.filter(p => p.category === cat && parseFloat(p.price) <= maxPrice);
+    if (products.length === 0) return;
+
+    products = sortProducts(products);
+    const carouselId = `cat-${cat.replace(/\s+/g, '-')}`;
+    html += `
+      <section class="cat-section" id="${cat.toLowerCase().replace(/\s+/g,'-')}" aria-label="${cat}">
+        <div class="cat-section-header">
+          <h2 class="cat-section-title">${getCatIcon(cat)} ${cat}</h2>
+          <a href="#" onclick="filterCategory('${cat}');return false;" style="font-size:0.82rem;color:var(--green-light);font-weight:600">
+            See all ${products.length} →
+          </a>
+        </div>
+        <div class="cat-carousel-wrapper">
+          <button class="carousel-btn carousel-btn-prev" id="${carouselId}-prev" aria-label="Previous">&#8592;</button>
+          <div class="cat-track-container">
+            <div class="cat-track" id="${carouselId}-track">
+              ${products.map(p => renderProductCard(p)).join('')}
+            </div>
+          </div>
+          <button class="carousel-btn carousel-btn-next" id="${carouselId}-next" aria-label="Next">&#8594;</button>
+        </div>
+      </section>`;
+  });
+
+  if (!html) {
+    container.innerHTML = `<div style="text-align:center;padding:60px;color:var(--text-light)">
+      <div style="font-size:2.5rem;margin-bottom:14px">🔍</div>
+      <p>No products found in this category yet.</p>
+      <br/><a href="admin.html" class="btn-outline" style="display:inline-flex;justify-content:center;margin-top:8px"><span>Add Products</span></a>
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = html;
+
+  // Init carousels & events
+  cats.forEach(cat => {
+    const carouselId = `cat-${cat.replace(/\s+/g, '-')}`;
+    const track = document.getElementById(`${carouselId}-track`);
+    const prev = document.getElementById(`${carouselId}-prev`);
+    const next = document.getElementById(`${carouselId}-next`);
+    if (track) {
+      carouselInstances[cat] = initCarousel(track, prev, next);
+      track.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', () => openProductModal(card.dataset.id));
+      });
+      track.querySelectorAll('.btn-add-cart').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = btn.closest('.product-card').dataset.id;
+          const product = allProducts.find(p => p.id === id);
+          if (product) { addToCart(product, 1); showToast(`${product.name} added!`); renderCart(); }
+        });
+      });
+    }
+  });
+}
+
+function getCatIcon(cat) {
+  const icons = { Soaps: '🧼', Creams: '🧴', Scrubs: '✨', Oils: '💧', 'Hair Care': '💆‍♀️' };
+  return icons[cat] || '🌿';
+}
+
+function sortProducts(products) {
+  return [...products].sort((a, b) => {
+    if (currentSort === 'low') return parseFloat(a.price) - parseFloat(b.price);
+    if (currentSort === 'high') return parseFloat(b.price) - parseFloat(a.price);
+    return 0; // newest: already ordered by createdAt from Firestore
+  });
+}
+
+// ============================================ RENDER CARD
+function renderProductCard(p) {
+  const img = (p.images && p.images[0]) ? p.images[0] : 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&q=80';
+  const badge = p.badge ? `<div class="product-badge badge-${p.badge.toLowerCase()}">${p.badge}</div>` : '';
+  const oldPrice = p.oldPrice ? `<span class="price-old">${fmt(p.oldPrice)}</span>` : '';
+  return `
+    <div class="product-card" data-id="${p.id}" role="button" tabindex="0" aria-label="${p.name}">
+      <div class="product-card-img">
+        <img src="${img}" alt="${p.name}" loading="lazy"/>
+        ${badge}
+        <button class="product-card-wishlist" onclick="event.stopPropagation()" title="Wishlist">♡</button>
+      </div>
+      <div class="product-card-body">
+        <div class="product-card-cat">${p.category || 'Skincare'}</div>
+        <div class="product-card-name">${p.name}</div>
+        <div class="product-card-price">
+          <span class="price-current">${fmt(p.price)}</span>
+          ${oldPrice}
+        </div>
+      </div>
+      <div class="product-card-footer">
+        <button class="btn-add-cart">Add to Cart</button>
+      </div>
+    </div>`;
+}
+
+// ============================================ FILTER
+window.filterCategory = (cat, el) => {
+  currentCategory = cat;
+  // Update sidebar
+  document.querySelectorAll('.category-item[data-cat]').forEach(i => i.classList.toggle('active', i.dataset.cat === cat));
+  // Update tabs
+  document.querySelectorAll('.shop-cat-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+  renderShopSections();
+  // Scroll to top of main
+  document.querySelector('.shop-main').scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+window.onPriceChange = (val) => {
+  maxPrice = parseInt(val);
+  document.getElementById('priceLabel').textContent = `₦${parseInt(val).toLocaleString()}`;
+};
+
+window.setSort = (val, el) => {
+  currentSort = val;
+  document.getElementById('shopSort').value = val;
+  document.querySelectorAll('[id^="sort"]').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderShopSections();
+};
+
+window.applyFilters = () => {
+  renderShopSections();
+  // Close mobile sidebar
+  document.getElementById('shopSidebar').classList.remove('mobile-open');
+  showToast('Filters applied!', 'success');
+};
+
+window.toggleMobileSidebar = () => {
+  document.getElementById('shopSidebar').classList.toggle('mobile-open');
+};
+
+// ============================================ PRODUCT MODAL
+window.openProductModal = function(productId) {
+  const product = allProducts.find(p => p.id === productId);
+  if (!product) return;
+
+  const img1 = (product.images && product.images[0]) ? product.images[0] : 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80';
+  const img2 = (product.images && product.images[1]) ? product.images[1] : img1;
+  const related = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+
+  let overlay = document.getElementById('productModalOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'productModalOverlay';
+    overlay.className = 'modal-overlay';
+    overlay.addEventListener('click', e => { if(e.target === overlay) closeProductModal(); });
+    document.body.appendChild(overlay);
+  }
+
+  overlay.innerHTML = `
+    <div class="product-modal" role="dialog" aria-modal="true" aria-label="${product.name}">
+      <button class="modal-close" onclick="closeProductModal()" aria-label="Close">✕</button>
+      <div class="modal-images">
+        <div class="modal-img-main">
+          <div class="modal-img-main-container" id="imgContainer" style="display:flex;transition:transform .4s ease;width:200%;height:100%">
+            <img src="${img1}" alt="${product.name} front" style="width:50%;height:100%;object-fit:cover;flex-shrink:0"/>
+            <img src="${img2}" alt="${product.name} side" style="width:50%;height:100%;object-fit:cover;flex-shrink:0"/>
+          </div>
+        </div>
+        <div class="modal-img-arrows">
+          <button class="modal-img-arrow" onclick="slideModalImg(0)">❮</button>
+          <button class="modal-img-arrow" onclick="slideModalImg(1)">❯</button>
+        </div>
+        <div class="modal-img-scroll-hint">← Tap arrows to view more →</div>
+      </div>
+      <div class="modal-info">
+        <div class="modal-cat">${product.category || 'Skincare'}</div>
+        <h2 class="modal-name">${product.name}</h2>
+        <div class="modal-stars">★★★★★ <span style="color:var(--text-light);font-size:0.8rem">(${Math.floor(Math.random()*50)+15} reviews)</span></div>
+        <div class="modal-price">
+          <span class="modal-price-current">${fmt(product.price)}</span>
+          ${product.oldPrice ? `<span class="modal-price-old">${fmt(product.oldPrice)}</span>` : ''}
+        </div>
+        <p class="modal-desc">${product.description || 'Premium natural beauty product crafted with the finest botanical ingredients for your skin care routine.'}</p>
+        <div class="modal-divider"></div>
+        <div class="modal-qty-row">
+          <span style="font-size:0.85rem;font-weight:600;color:var(--text-mid)">Quantity:</span>
+          <div class="modal-qty">
+            <button onclick="changeModalQty(-1)">−</button>
+            <span id="modalQty">1</span>
+            <button onclick="changeModalQty(1)">+</button>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary" style="justify-content:center" onclick="addModalToCart('${product.id}')">
+            <span>Add to Cart</span>
+          </button>
+          <button class="btn-whatsapp" onclick="buyNowWhatsApp('${product.id}')">
+            💬 Buy via WhatsApp
+          </button>
+        </div>
+        ${related.length > 0 ? `
+        <div class="modal-related">
+          <h4>You May Also Like</h4>
+          <div class="related-grid">
+            ${related.map(r => `
+              <div class="related-card" onclick="openProductModal('${r.id}')">
+                <img src="${(r.images && r.images[0]) ? r.images[0] : 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=200&q=80'}" alt="${r.name}" loading="lazy"/>
+                <div class="related-card-info">
+                  <div class="related-card-name">${r.name}</div>
+                  <div class="related-card-price">${fmt(r.price)}</div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>` : ''}
+      </div>
+    </div>`;
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  window._currentModalProduct = product;
+  window._modalQty = 1;
+};
+
+window.closeProductModal = () => {
+  document.getElementById('productModalOverlay')?.classList.remove('open');
+  document.body.style.overflow = '';
+};
+
+window.slideModalImg = (idx) => {
+  const c = document.getElementById('imgContainer');
+  if (c) c.style.transform = `translateX(-${idx * 50}%)`;
+};
+
+window.changeModalQty = (delta) => {
+  window._modalQty = Math.max(1, (window._modalQty || 1) + delta);
+  document.getElementById('modalQty').textContent = window._modalQty;
+};
+
+window.addModalToCart = (id) => {
+  const product = allProducts.find(p => p.id === id);
+  if (product) {
+    addToCart(product, window._modalQty || 1);
+    showToast(`${product.name} added to cart!`);
+    renderCart();
+    closeProductModal();
+  }
+};
+
+window.buyNowWhatsApp = (id) => {
+  const product = allProducts.find(p => p.id === id);
+  if (product) {
+    const qty = window._modalQty || 1;
+    const msg = encodeURIComponent(`🌿 *LuxeGreen Order*\n\n• ${product.name} x${qty} — ${fmt(product.price * qty)}\n\nPlease confirm my order. Thank you!`);
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+  }
+};
+
+// ============================================ CART
+window.toggleCart = () => {
+  document.getElementById('cartSidebar').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('cartSidebar').classList.contains('open') ? 'hidden' : '';
+};
+
+window.renderCart = function() {
+  const cart = getCart();
+  const count = getCartCount();
+  document.getElementById('cartBadge').textContent = count;
+  const mob = document.getElementById('mobCartBadge');
+  if (mob) { mob.textContent = count; mob.style.display = count > 0 ? 'flex' : 'none'; }
+  const cartItems = document.getElementById('cartItems');
+  const cartFooter = document.getElementById('cartFooter');
+
+  if (cart.length === 0) {
+    cartItems.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Your cart is empty.</p></div>`;
+    cartFooter.style.display = 'none';
+    return;
+  }
+  cartFooter.style.display = 'block';
+  document.getElementById('cartTotal').textContent = fmt(getCartTotal());
+  cartItems.innerHTML = cart.map(item => {
+    const img = (item.images && item.images[0]) ? item.images[0] : 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=120&q=80';
+    return `<div class="cart-item">
+      <img class="cart-item-img" src="${img}" alt="${item.name}"/>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${fmt(item.price)}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+          <span class="cart-item-remove" onclick="removeItem('${item.id}')">✕</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+};
+
+window.changeQty = (id, delta) => { const cart = getCart(); const item = cart.find(i => i.id === id); if(item) updateCartQty(id, item.qty + delta); renderCart(); };
+window.removeItem = (id) => { removeFromCart(id); renderCart(); };
+window.checkoutWhatsApp = () => { openWhatsApp(getCart()); closeCheckout(); };
+window.openCheckout = () => {
+  document.getElementById('checkoutOverlay').classList.add('open');
+  document.getElementById('cardPayTotal').textContent = fmt(getCartTotal());
+  document.getElementById('cardPaymentForm').style.display = 'none';
+  document.getElementById('cardMethodBtn').style.display = 'flex';
+};
+window.closeCheckout = () => document.getElementById('checkoutOverlay').classList.remove('open');
+window.showCardForm = () => {
+  document.getElementById('cardPaymentForm').style.display = 'block';
+  document.getElementById('cardMethodBtn').style.display = 'none';
+};
+window.processCardPayment = () => { showToast('Payment gateway ready! Connect Paystack or Flutterwave.', 'info'); closeCheckout(); };
+
+window.addEventListener('cartUpdated', renderCart);
+initReveal();
+loadShopProducts();
+renderCart();
+</script>
+</body>
+</html>
